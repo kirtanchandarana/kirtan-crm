@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: 99 102 241; /* Indigo-500 */
+    --primary-dark: 79 70 229; /* Indigo-600 */
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased font-sans dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight dark:text-white;
+  }
+}
+
+@layer components {
+  /* Premium Card Styles */
+  .card {
+    @apply bg-white rounded-2xl border border-slate-200/60 shadow-card transition-all duration-300 dark:bg-slate-800/80 dark:border-slate-700/50 dark:shadow-none;
+  }
+
+  .card-hover {
+    @apply card hover:shadow-card-hover hover:-translate-y-1 hover:border-primary-200/50 dark:hover:border-primary-500/30;
+  }
+
+  /* Glassmorphism */
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl border border-white/50 shadow-soft dark:bg-slate-900/80 dark:border-slate-700/50;
+  }
+
+  /* Gradient Text */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-violet-600 dark:from-primary-400 dark:to-violet-400;
+  }
+
+  /* Interactive Button */
+  .btn-primary {
+    @apply relative overflow-hidden bg-gradient-to-r from-primary-600 to-violet-600 text-white font-semibold rounded-xl shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 hover:-translate-y-0.5 transition-all duration-300;
+  }
+  
+  .btn-primary::after {
+    content: '';
+    @apply absolute inset-0 bg-white/20 opacity-0 transition-opacity duration-300;
+  }
+  
+  .btn-primary:hover::after {
+    @apply opacity-100;
+  }
+
+  /* Status Badges */
+  .badge {
+    @apply px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide border;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 rounded-full hover:bg-slate-400 dark:bg-slate-700 dark:hover:bg-slate-600 transition-colors;
+}
