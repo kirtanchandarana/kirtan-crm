@@ -74,17 +74,30 @@ async function initializeTables() {
             await pool.query(sql);
         }
 
-        // Create default admin if not exists
+        // Check if admin exists and ensure password is correct
         const { rows } = await pool.query("SELECT * FROM users WHERE email = 'admin@kirtancrm.com'");
+        const hashedPassword = bcrypt.hashSync('admin123', 10);
+        
         if (rows.length === 0) {
-            const hashedPassword = bcrypt.hashSync('admin123', 10);
             await pool.query(
                 "INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4)", 
                 ['Admin User', 'admin@kirtancrm.com', hashedPassword, 'admin']
             );
             console.log('Default admin account created: admin@kirtancrm.com / admin123');
         } else {
-            console.log('Database connected and initialized successfully.');
+            // Force update password to ensure it is properly hashed
+            // In case it was inserted as plaintext previously or changed
+            const admin = rows[0];
+            const isMatch = bcrypt.compareSync('admin123', admin.password);
+            if (!isMatch) {
+                 await pool.query(
+                     "UPDATE users SET password = $1 WHERE email = 'admin@kirtancrm.com'",
+                     [hashedPassword]
+                 );
+                 console.log('Admin password updated to properly hashed admin123');
+            } else {
+                 console.log('Database connected and initialized successfully.');
+            }
         }
     } catch (err) {
         console.error('Initialization error:', err.message);
